@@ -26,7 +26,11 @@ TEMPLATE_DEBUG = True
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
-ALLOWED_HOSTS = []
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -78,7 +82,34 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.7/howto/static-files/
+#Templates directory
+# https://docs.djangoproject.com/en/1.7/intro/tutorial02/#customizing-your-project-s-templates
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
+# Static asset configuration for static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.7/howto/static-files/
+STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+# Output Django logs to Heroku logplex
+# Django logging: https://docs.djangoproject.com/en/1.7/topics/logging/
+# Heroku logging: https://devcenter.heroku.com/articles/logging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+        }
+    }
+}
